@@ -250,3 +250,174 @@ button[type="button"] {
 button:hover {
     opacity: 0.9; /* Эффект наведения на кнопку */
 }
+
+.modal__header {
+    display: flex;
+    justify-content: space-between; /* Разделение заголовка и кнопки закрытия */
+    align-items: center;
+}
+
+.modal__title {
+    font-size: 1.5em; /* Размер шрифта заголовка */
+}
+
+.modal__close {
+    background: none; /* Без фона */
+    border: none; /* Без границы */
+    font-size: 1.5em; /* Размер шрифта кнопки закрытия */
+    cursor: pointer; /* Указатель при наведении */
+}
+
+/* Основной контент модального окна */
+.modal__content {
+    margin-top: 15px; /* Отступ сверху от заголовка */
+}
+
+/* Стили для информации о заказе */
+.order-info {
+    margin-bottom: 15px; /* Отступ снизу от информации о заказе */
+}
+
+/* Стили для таблицы с заказами */
+.order_items {
+    width: 100%; /* Полная ширина таблицы */
+    border-collapse: collapse; /* Убираем двойные границы между ячейками */
+}
+
+.order_items th,
+.order_items td {
+    border: 1px solid #ccc; /* Граница ячеек таблицы */
+    padding: 8px; /* Внутренний отступ в ячейках */
+}
+
+.order_items th {
+    background-color: #f2f2f2; /* Цвет фона заголовков таблицы */
+}
+
+/* Стили для текста даты и общей суммы заказа */
+.order_date,
+.order_total {
+    font-size: 0.9em; /* Уменьшенный размер шрифта для дополнительной информации */
+}
+
+@media (max-width:1400px){}
+
+@media (max-width:992px){}
+
+@media (max-width: 985px) {
+    .clients table {
+        width:100%;
+        table-layout: fixed;
+        border: none;
+    }
+    .clients table thead th {
+        font-weight: bold;
+        text-align: left;
+        border: none;
+        padding: 10px 15px;
+        background: #6c6c6d;
+        font-size: 9px;
+        border-left: 1px solid #ddd;
+        border-right: 1px solid #ddd;
+    }
+    .clients table td {
+        text-align: left;
+        border-left: 1px solid #ddd;
+        border-right: 1px solid #ddd;
+        padding: 10px 15px;
+        font-size: 8px;
+        vertical-align: top;
+    }
+    .clients table tbody tr:nth-child(even){
+        background: #f3f3f3;
+    }
+     
+    /* Стили для скролла */
+    ::-webkit-scrollbar {
+        width: 6px;
+    } 
+    ::-webkit-scrollbar-track {
+        box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+    } 
+    ::-webkit-scrollbar-thumb {
+        box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+    }
+
+    .clients_add{
+        display: flex;
+        justify-content: flex-end;
+        font-size:20px;
+        top: 16px;
+    }   
+}
+
+@media (max-width:650px){
+    .form_filters{
+        display: flex;
+        flex-direction: column;
+    }
+
+    .clients table {
+        width:100%;
+        table-layout: fixed;
+        border: none;
+    }
+    .clients table thead th {
+        text-align: left;
+        border: none;
+        padding: 10px 15px;
+        background: #6c6c6d;
+        font-size: 9px;
+    }
+    .clients table td {
+        text-align: left;
+        border-left: 1px solid #ddd;
+        border-right: 1px solid #ddd;
+        padding: 10px 15px;
+        font-size: 5px;
+        vertical-align: top;
+    }
+    .clients table tbody tr:nth-child(even){
+        background: #f3f3f3;
+    }
+     
+    /* Стили для скролла */
+    ::-webkit-scrollbar {
+        width: 6px;
+    } 
+    ::-webkit-scrollbar-track {
+        box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+    } 
+    ::-webkit-scrollbar-thumb {
+        box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+    }
+
+    .clients_add{
+        display: flex;
+        justify-content: flex-end;
+        font-size:20px;
+        top: 16px;
+    }   
+
+    label {
+        margin-bottom: 5px;
+        display: flex;
+        justify-content: center;
+    }
+
+    form {
+        gap: 35px; 
+    }
+
+    input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="date"] {
+    width: 100%; /* Полная ширина поля ввода */
+    padding: 10px; /* Отступы внутри поля ввода */
+    border-radius: 4px; /* Закругленные углы полей ввода */
+    border: 1px solid #ccc; /* Рамка поля ввода */
+}
+
+    
+}

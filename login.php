@@ -1,6 +1,6 @@
 <?php session_start();
 
-require_once 'modules/AuthCheck.php';
+require_once 'api/auth/AuthCheck.php';
 
 AuthCheck('clients.php');
 
@@ -20,13 +20,31 @@ AuthCheck('clients.php');
 </head>
 <body>
     <div class="container">
-        <form class="login-form">
+        <form action="api/auth/login.php" method = "POST" class="login-form">
             <h2>Вход</h2>
             <label for="username">Логин:</label>
-            <input type="text" id="username" name="username" required>
+            <input type="text" id="username" name="username">
+            <p class="error" style = "color:red">
+                <?php
+                    if(isset($_SESSION['login-errors'])){
+                        $errors = $_SESSION['login-errors'];
+                        
+                        echo isset($errors['login']) ? $errors['login'] : '';
+                    }
+                ?>
+            </p>
             
             <label for="password">Пароль:</label>
-            <input type="password" id="password" name="password" required>
+            <input type="password" id="password" name="password">
+            <p class="error" style = "color:red">
+                <?php
+                    if(isset($_SESSION['login-errors'])){
+                        $errors = $_SESSION['login-errors'];
+                        
+                        echo isset($errors['password']) ? $errors['password'] : '';
+                    }
+                ?>
+            </p>
 
             <button type="submit">Войти</button>
         </form>

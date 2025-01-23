@@ -2,10 +2,16 @@
 
 session_start();
 
+if(isset($_GET['do']) && $_GET['do'] === 'logout'){
+    require_once 'api/auth/LogoutUser.php';
+    require_once 'api/DB.php';
+
+    LogoutUser('login.php', $DB, $_SESSION['token']);
+}
+
 require_once 'api/auth/AuthCheck.php';
 
 AuthCheck('', 'login.php');
-
 
 ?>
 
@@ -24,7 +30,14 @@ AuthCheck('', 'login.php');
     <header class="header">
         <div class="container">
             <div class="header_navigation">
-                <p class="header_admin">Фамилия Имя Отчество</p>
+                <p class="header_admin">
+                    <?php
+                    require 'api/DB.php';
+                    require_once 'api/clients/AdminName.php';
+
+                    echo AdminName($_SESSION['token'], $DB);
+                    ?>
+                </p>
                 <ul class="header_links">
                     <li>
                         <a href="#">Клиенты</a>
@@ -32,7 +45,7 @@ AuthCheck('', 'login.php');
                         <a href="#">Заказы</a>
                     </li>
                 </ul>
-                <a class="header_logout" href="#">Выйти</a>
+                <a class="header_logout" href="?do=logout">Выйти</a>
             </div>
         </div>
     </header>
@@ -69,318 +82,17 @@ AuthCheck('', 'login.php');
                     <th>Удалить</th>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>0</td>
-                        <td>Иванов Иван Иванович</td>
-                        <td>ivan@example.com</td>
-                        <td>+79998887766</td>
-                        <td>10.01.1999</td>
-                        <td>15.01.2025</td>
-                        <td onclick="MicroModal.show('history-modal')"><i class="fa fa-history" aria-hidden="true"></i></td>
-                        <td onclick="MicroModal.show('edit-modal')"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                        </td>
-                        <td onclick="MicroModal.show('delete-modal')"><i class="fa fa-trash-o" aria-hidden="true"></i>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>0</td>
-                        <td>Петров Петр Петрович</td>
-                        <td>petr@example.com</td>
-                        <td>+79997778866</td>
-                        <td>10.01.1990</td>
-                        <td>15.01.2025</td>
-                        <td><i class="fa fa-history" aria-hidden="true"></i></td>
-                        <td><i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                        </td>
-                        <td><i class="fa fa-trash-o" aria-hidden="true"></i>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>0</td>
-                        <td>Максимов Максим Максимович</td>
-                        <td>maks@example.com</td>
-                        <td>+79606786236</td>
-                        <td>10.01.2002</td>
-                        <td>15.01.2025</td>
-                        <td><i class="fa fa-history" aria-hidden="true"></i></td>
-                        <td><i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                        </td>
-                        <td><i class="fa fa-trash-o" aria-hidden="true"></i>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>0</td>
-                        <td>Иванов Иван Иванович</td>
-                        <td>ivan@example.com</td>
-                        <td>+79998887766</td>
-                        <td>10.01.1999</td>
-                        <td>15.01.2025</td>
-                        <td><i class="fa fa-history" aria-hidden="true"></i></td>
-                        <td><i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                        </td>
-                        <td><i class="fa fa-trash-o" aria-hidden="true"></i>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>0</td>
-                        <td>Петров Петр Петрович</td>
-                        <td>petr@example.com</td>
-                        <td>+79997778866</td>
-                        <td>10.01.1990</td>
-                        <td>15.01.2025</td>
-                        <td><i class="fa fa-history" aria-hidden="true"></i></td>
-                        <td><i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                        </td>
-                        <td><i class="fa fa-trash-o" aria-hidden="true"></i>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>0</td>
-                        <td>Максимов Максим Максимович</td>
-                        <td>maks@example.com</td>
-                        <td>+79606786236</td>
-                        <td>10.01.2002</td>
-                        <td>15.01.2025</td>
-                        <td><i class="fa fa-history" aria-hidden="true"></i></td>
-                        <td><i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                        </td>
-                        <td><i class="fa fa-trash-o" aria-hidden="true"></i>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>0</td>
-                        <td>Иванов Иван Иванович</td>
-                        <td>ivan@example.com</td>
-                        <td>+79998887766</td>
-                        <td>10.01.1999</td>
-                        <td>15.01.2025</td>
-                        <td><i class="fa fa-history" aria-hidden="true"></i></td>
-                        <td><i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                        </td>
-                        <td><i class="fa fa-trash-o" aria-hidden="true"></i>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>0</td>
-                        <td>Петров Петр Петрович</td>
-                        <td>petr@example.com</td>
-                        <td>+79997778866</td>
-                        <td>10.01.1990</td>
-                        <td>15.01.2025</td>
-                        <td><i class="fa fa-history" aria-hidden="true"></i></td>
-                        <td><i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                        </td>
-                        <td><i class="fa fa-trash-o" aria-hidden="true"></i>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>0</td>
-                        <td>Максимов Максим Максимович</td>
-                        <td>maks@example.com</td>
-                        <td>+79606786236</td>
-                        <td>10.01.2002</td>
-                        <td>15.01.2025</td>
-                        <td><i class="fa fa-history" aria-hidden="true"></i></td>
-                        <td><i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                        </td>
-                        <td><i class="fa fa-trash-o" aria-hidden="true"></i>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>0</td>
-                        <td>Иванов Иван Иванович</td>
-                        <td>ivan@example.com</td>
-                        <td>+79998887766</td>
-                        <td>10.01.1999</td>
-                        <td>15.01.2025</td>
-                        <td><i class="fa fa-history" aria-hidden="true"></i></td>
-                        <td><i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                        </td>
-                        <td><i class="fa fa-trash-o" aria-hidden="true"></i>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>0</td>
-                        <td>Петров Петр Петрович</td>
-                        <td>petr@example.com</td>
-                        <td>+79997778866</td>
-                        <td>10.01.1990</td>
-                        <td>15.01.2025</td>
-                        <td><i class="fa fa-history" aria-hidden="true"></i></td>
-                        <td><i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                        </td>
-                        <td><i class="fa fa-trash-o" aria-hidden="true"></i>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>0</td>
-                        <td>Максимов Максим Максимович</td>
-                        <td>maks@example.com</td>
-                        <td>+79606786236</td>
-                        <td>10.01.2002</td>
-                        <td>15.01.2025</td>
-                        <td><i class="fa fa-history" aria-hidden="true"></i></td>
-                        <td><i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                        </td>
-                        <td><i class="fa fa-trash-o" aria-hidden="true"></i>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>0</td>
-                        <td>Иванов Иван Иванович</td>
-                        <td>ivan@example.com</td>
-                        <td>+79998887766</td>
-                        <td>10.01.1999</td>
-                        <td>15.01.2025</td>
-                        <td><i class="fa fa-history" aria-hidden="true"></i></td>
-                        <td><i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                        </td>
-                        <td><i class="fa fa-trash-o" aria-hidden="true"></i>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>0</td>
-                        <td>Петров Петр Петрович</td>
-                        <td>petr@example.com</td>
-                        <td>+79997778866</td>
-                        <td>10.01.1990</td>
-                        <td>15.01.2025</td>
-                        <td><i class="fa fa-history" aria-hidden="true"></i></td>
-                        <td><i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                        </td>
-                        <td><i class="fa fa-trash-o" aria-hidden="true"></i>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>0</td>
-                        <td>Максимов Максим Максимович</td>
-                        <td>maks@example.com</td>
-                        <td>+79606786236</td>
-                        <td>10.01.2002</td>
-                        <td>15.01.2025</td>
-                        <td><i class="fa fa-history" aria-hidden="true"></i></td>
-                        <td><i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                        </td>
-                        <td><i class="fa fa-trash-o" aria-hidden="true"></i>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>0</td>
-                        <td>Иванов Иван Иванович</td>
-                        <td>ivan@example.com</td>
-                        <td>+79998887766</td>
-                        <td>10.01.1999</td>
-                        <td>15.01.2025</td>
-                        <td><i class="fa fa-history" aria-hidden="true"></i></td>
-                        <td><i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                        </td>
-                        <td><i class="fa fa-trash-o" aria-hidden="true"></i>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>0</td>
-                        <td>Петров Петр Петрович</td>
-                        <td>petr@example.com</td>
-                        <td>+79997778866</td>
-                        <td>10.01.1990</td>
-                        <td>15.01.2025</td>
-                        <td><i class="fa fa-history" aria-hidden="true"></i></td>
-                        <td><i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                        </td>
-                        <td><i class="fa fa-trash-o" aria-hidden="true"></i>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>0</td>
-                        <td>Максимов Максим Максимович</td>
-                        <td>maks@example.com</td>
-                        <td>+79606786236</td>
-                        <td>10.01.2002</td>
-                        <td>15.01.2025</td>
-                        <td><i class="fa fa-history" aria-hidden="true"></i></td>
-                        <td><i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                        </td>
-                        <td><i class="fa fa-trash-o" aria-hidden="true"></i>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>0</td>
-                        <td>Иванов Иван Иванович</td>
-                        <td>ivan@example.com</td>
-                        <td>+79998887766</td>
-                        <td>10.01.1999</td>
-                        <td>15.01.2025</td>
-                        <td><i class="fa fa-history" aria-hidden="true"></i></td>
-                        <td><i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                        </td>
-                        <td><i class="fa fa-trash-o" aria-hidden="true"></i>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>0</td>
-                        <td>Петров Петр Петрович</td>
-                        <td>petr@example.com</td>
-                        <td>+79997778866</td>
-                        <td>10.01.1990</td>
-                        <td>15.01.2025</td>
-                        <td><i class="fa fa-history" aria-hidden="true"></i></td>
-                        <td><i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                        </td>
-                        <td><i class="fa fa-trash-o" aria-hidden="true"></i>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>0</td>
-                        <td>Максимов Максим Максимович</td>
-                        <td>maks@example.com</td>
-                        <td>+79606786236</td>
-                        <td>10.01.2002</td>
-                        <td>15.01.2025</td>
-                        <td><i class="fa fa-history" aria-hidden="true"></i></td>
-                        <td><i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                        </td>
-                        <td><i class="fa fa-trash-o" aria-hidden="true"></i>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>0</td>
-                        <td>Иванов Иван Иванович</td>
-                        <td>ivan@example.com</td>
-                        <td>+79998887766</td>
-                        <td>10.01.1999</td>
-                        <td>15.01.2025</td>
-                        <td><i class="fa fa-history" aria-hidden="true"></i></td>
-                        <td><i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                        </td>
-                        <td><i class="fa fa-trash-o" aria-hidden="true"></i>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>0</td>
-                        <td>Петров Петр Петрович</td>
-                        <td>petr@example.com</td>
-                        <td>+79997778866</td>
-                        <td>10.01.1990</td>
-                        <td>15.01.2025</td>
-                        <td><i class="fa fa-history" aria-hidden="true"></i></td>
-                        <td><i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                        </td>
-                        <td><i class="fa fa-trash-o" aria-hidden="true"></i>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>0</td>
-                        <td>Максимов Максим Максимович</td>
-                        <td>maks@example.com</td>
-                        <td>+79606786236</td>
-                        <td>10.01.2002</td>
-                        <td>15.01.2025</td>
-                        <td><i class="fa fa-history" aria-hidden="true"></i></td>
-                        <td><i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                        </td>
-                        <td><i class="fa fa-trash-o" aria-hidden="true"></i>
-                        </td>
-                    </tr>
+                    <?php
+                    require 'api/DB.php';
+                    require_once('api/clients/OutputClients.php');
+
+                    $clients = $DB->query(
+                        "SELECT * FROM clients
+                    ")->fetchAll();
+
+                    OutputClients($clients);
+
+                    ?>
                 </tbody>
             </table>
             <button onclick="MicroModal.show('add-modal')" class="clients_add" >

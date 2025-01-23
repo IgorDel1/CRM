@@ -4,14 +4,17 @@
 function AuthCheck($successPath = '', $errorPath  = '') {
 
     require_once 'api/DB.php';
+    require_once 'LogoutUser.php';
 
     //$_SESSION['token'] = '';
    
 
-    if (!isset($_SESSION['token']) && $errorPath) {
-        
-        header("Location: $errorPath");
-        
+    if (!isset($_SESSION['token'])) {
+
+        if($errorPath){
+            header("Location: $errorPath");
+        }
+
         return;
     }
  
@@ -22,6 +25,8 @@ function AuthCheck($successPath = '', $errorPath  = '') {
     )->fetchAll();
 
     if (empty($adminID) && $errorPath) {
+        LogotUser($errorPath, $DB);
+
         header ("Location: $errorPath");
     }
 

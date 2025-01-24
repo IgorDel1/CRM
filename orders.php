@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Заказы | CRM</title>
+    <title>Товары | CRM</title>
     <link rel="stylesheet" href="styles/modules/font-awesome-4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="styles/pages/setting.css">
     <link rel="stylesheet" href="styles/pages/products.css">
@@ -36,9 +36,10 @@
                         <option value="1">По убыванию</option>
                     </select>
                     <select name="sort" id="sort">
-                        <option value="0">Название</option>
-                        <option value="1">Цена</option>
-                        <option value="2">Количество</option>
+                        <option value="0">Клиент</option>
+                        <option value="1">ID</option>
+                        <option value="2">Дата</option>
+                        <option value="3">Сумма</option>
                     </select>
                 </form>
             </div>
@@ -48,53 +49,36 @@
     <section class="clients">
         <div class="container">
             <div class="info">
-                <h2 class="clients_title">Список товаров</h2>
+                <h2 class="clients_title">Список заказов</h2>
             </div>
             <table >
                 <thead>
                     <th>ID</th>
-                    <th>Название</th>
-                    <th>Описание</th>
+                    <th>ФИО</th>
+                    <th>Дата заказа</th>
                     <th>Цена</th>
+                    <th>Название</th>
                     <th>Количество</th>
+                    <th>Общая цена</th>
                     <th>Редактировать</th>
                     <th>Удалить</th>
                     <th>Создать QR</th>
+                    <th>Подробнее</th>
                 </thead>
                 <tbody>
                     <tr>
                         <td>1</td>
-                        <td>Кроссовки</td>
-                        <td>Кроссовки Nike</td>
+                        <td>Иванов Иван Иванович</td>
+                        <td>24.01.2025</td>
                         <td>20000</td>
-                        <td>100</td>
-                        <td onclick="MicroModal.show('edit-modal')"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                        <td onclick="MicroModal.show('delete-modal')"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
-                        <td onclick="MicroModal.show('history-modal')"><i class="fa fa-qrcode" aria-hidden="true"></i>
-                        </td>
-                    </td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
                         <td>Футболка</td>
-                        <td>Футболка Lacoste</td>
-                        <td>25000</td>
-                        <td>50</td>
+                        <td>20 шт.</td>
+                        <td>400000</td>
                         <td onclick="MicroModal.show('edit-modal')"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                         <td onclick="MicroModal.show('delete-modal')"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                         <td onclick="MicroModal.show('history-modal')"><i class="fa fa-qrcode" aria-hidden="true"></i>
-                        </td>
-                    </td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>Ноутбук</td>
-                        <td>MSI Katana GF76</td>
-                        <td>75000</td>
-                        <td>10</td>
-                        <td onclick="MicroModal.show('edit-modal')"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                        <td onclick="MicroModal.show('delete-modal')"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
-                        <td onclick="MicroModal.show('history-modal')"><i class="fa fa-qrcode" aria-hidden="true"></i>
+                        <td onclick="MicroModal.show('more detailed-modal')"><i class="fa fa-ellipsis-h" aria-hidden="true"></i>
+                        </i>
                         </td>
                     </td>
                     </tr>
@@ -117,18 +101,18 @@
             <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-1-title">
                 <header class="modal__header">
                     <h2 class="modal__title" id="modal-1-title">
-                        Редактировать товар
+                        Редактировать заказ
                     </h2>
                     <button class="modal__close" aria-label="Close modal" data-micromodal-close></button>
                 </header>
                 <main class="modal__content" id="modal-1-content">
                     <form id="registration-form">
                         <div class="form-group">
-                            <label for="full-name">Название</label>
+                            <label for="full-name">ФИО</label>
                             <input type="text" id="full-name" name="full-name" required>
                         </div>
                         <div class="form-group">
-                            <label for="email">Описание</label>
+                            <label for="email">Дата заказа</label>
                             <input type="email" id="email" name="email" required>
                         </div>
                         <div class="form-group">
@@ -137,6 +121,10 @@
                         </div>
                         <div class="form-group">
                             <label for="phone">Количество</label>
+                            <input type="tel" id="phone" name="phone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Общая цена</label>
                             <input type="tel" id="phone" name="phone" required>
                         </div>
                     
@@ -168,7 +156,7 @@
             <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-1-title">
                 <header class="modal__header">
                     <h2 class="modal__title" id="modal-1-title">
-                        Удалить товар?
+                        Удалить заказ?
                     </h2>
                     <button class="modal__close" aria-label="Close modal" data-micromodal-close></button>
                 </header>
@@ -186,18 +174,18 @@
             <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-1-title">
                 <header class="modal__header">
                     <h2 class="modal__title" id="modal-1-title">
-                        Добавить товар
+                        Добавить заказ
                     </h2>
                     <button class="modal__close" aria-label="Close modal" data-micromodal-close></button>
                 </header>
                 <main class="modal__content" id="modal-1-content">
                     <form id="registration-form">
                         <div class="form-group">
-                            <label for="full-name">Название</label>
+                            <label for="full-name">ФИО</label>
                             <input type="text" id="full-name" name="full-name" required>
                         </div>
                         <div class="form-group">
-                            <label for="email">Описание</label>
+                            <label for="email">Дата заказа</label>
                             <input type="email" id="email" name="email" required>
                         </div>
                         <div class="form-group">
@@ -205,7 +193,15 @@
                             <input type="tel" id="phone" name="phone" required>
                         </div>
                         <div class="form-group">
+                            <label for="birthday">Название</label>
+                            <input type="text" id="cont" name="count" required>
+                        </div>
+                        <div class="form-group">
                             <label for="birthday">Количество</label>
+                            <input type="text" id="cont" name="count" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="birthday">Общая цена</label>
                             <input type="text" id="cont" name="count" required>
                         </div>
                         <div class="form-actions">
@@ -213,6 +209,43 @@
                             <button type="button" data-micromodal-close>Отменить</button>
                         </div>
                     </form>
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal micromodal-slide" id="more detailed-modal" aria-hidden="true">
+        <div class="modal__overlay" tabindex="-1" data-micromodal-close>
+            <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-1-title">
+                <header class="modal__header">
+                    <h2 class="modal__title" id="modal-1-title">
+                        История заказов
+                    </h2>
+                    <small>Иванов Иван Иванович</small>
+                    <button class="modal__close" aria-label="Close modal" data-micromodal-close></button>
+                </header>
+                <main class="modal__content" id="modal-1-content">
+                    <div class="order">
+                        <div class="order-info">
+                            <h3 class="order_number">Заказ 1</h3>
+                            <time class="order_date">Дата оформления: 2025-01-13 09:25:30</time>
+                            <p class="order_total">Общая сумма: 100000</p>
+                        </div>
+                        <table class="order_items">
+                            <tr>
+                                <th>ID</th>
+                                <th>Название товара</th>
+                                <th>Количество</th>
+                                <th>Цена</th>
+                            </tr>
+                            <tr>
+                                <th>9a45</th>
+                                <th>Футболка</th>
+                                <th>10</th>
+                                <th>10000</th>
+                            </tr>
+                        </table>
+                    </div>
                 </main>
             </div>
         </div>

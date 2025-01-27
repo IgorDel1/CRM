@@ -52,16 +52,20 @@ AuthCheck('', 'login.php');
     <main>
         <section class="filters">
             <div class="container">
-                <form action="" class="form_filters">
+                <form action = "" method = "GET" class="form_filters">
                     <label for="search">Поиск по имени</label>
-                    <input type="text" id="search" placeholder="Александр">
+                    <input type="text" id="search" placeholder="Александр" name = "search">
                     <select name="sort" id="sort">
-                        <option value="0">По возрастанию</option>
-                        <option value="1">По убыванию</option>
+                        <option value="">По умолчанию</option>
+                        <option value="ASC">По возрастанию</option>
+                        <option value="DESC">По убыванию</option>
                     </select>
+                    <button type = "submit">Поиск</button>
+                    <a href="clients.php">Сбросить</a>
                 </form>
             </div>
         </section>
+       
         
     </main>
     <section class="clients">
@@ -84,11 +88,10 @@ AuthCheck('', 'login.php');
                 <tbody>
                     <?php
                     require 'api/DB.php';
-                    require_once('api/clients/OutputClients.php');
+                    require_once 'api/clients/OutputClients.php';
+                    require_once 'api/clients/ClientsSearch.php';
 
-                    $clients = $DB->query(
-                        "SELECT * FROM clients
-                    ")->fetchAll();
+                   $clients = ClientsSearch($_GET, $DB);
 
                     OutputClients($clients);
 
@@ -111,22 +114,22 @@ AuthCheck('', 'login.php');
                     <button class="modal__close" aria-label="Close modal" data-micromodal-close></button>
                 </header>
                 <main class="modal__content" id="modal-1-content">
-                    <form id="registration-form">
+                    <form id="registration-form" action = "api/clients/AddClients.php" method = "POST">
                         <div class="form-group">
                             <label for="full-name">ФИО:</label>
-                            <input type="text" id="full-name" name="full-name" required>
+                            <input type="text" id="full-name" name="full-name">
                         </div>
                         <div class="form-group">
                             <label for="email">Почта:</label>
-                            <input type="email" id="email" name="email" required>
+                            <input type="email" id="email" name="email">
                         </div>
                         <div class="form-group">
                             <label for="phone">Телефон:</label>
-                            <input type="tel" id="phone" name="phone" required>
+                            <input type="tel" id="phone" name="phone">
                         </div>
                         <div class="form-group">
                             <label for="birthday">День рождения:</label>
-                            <input type="date" id="birthday" name="birthday" required>
+                            <input type="date" id="birthday" name="birthday">
                         </div>
                         <div class="form-actions">
                             <button type="submit">Добавить</button>
@@ -222,6 +225,22 @@ AuthCheck('', 'login.php');
                             </tr>
                         </table>
                     </div>
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal micromodal-slide open" id="delete-modal" aria-hidden="true">
+        <div class="modal__overlay" tabindex="-1" data-micromodal-close>
+            <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-1-title">
+                <header class="modal__header">
+                    <h2 class="modal__title" id="modal-1-title">
+                        оШибка
+                    </h2>
+                    <button class="modal__close" aria-label="Close modal" data-micromodal-close></button>
+                </header>
+                <main class="modal__content" id="modal-1-content">
+                    текст ошибки
                 </main>
             </div>
         </div>

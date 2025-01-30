@@ -44,27 +44,26 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
 
     //echo json_encode($clientsID);
 
-    if(empty($clientsID)){
-        $request = $DB-> query(
-            "INSERT INTO `clients`(`name`, `email`, `phone`, `birthday`) 
-             VALUES (?,?,?,?)"
-        )->execute([
-            $formData['name'],
-            $formData['email'],
-            $formData['phone'],
-            $formData['birthday']
-        ]);
+    if(!empty($clientsID)){
+        $_SESSION['clients-errors'] = '<h4>Клиент уже существует в БД</h4>';
 
         header('Location: ../../clients.php');
-
-        exit;
-    } else {
-
-        echo 'Такой юзер есть';
-
+        exit();
     }
 
-  
+    $sql = "INSERT INTO clients (name, email, phone, birthday)
+            VALUES (:name, :email, :phone, :birthday)";
+
+    $stmt = $DB -> prepare($sql);
+    $stmt->execute([
+        ':name' => $formData['full-name'],
+        ':email' => $formData['email'],
+        ':phone' => $formData['phone'],
+        ':birthday' => $formData['birthday']
+    ]);   
+    
+    header('Location: ../../clients.php');
+    exit();
 
 } else {
     echo json_encode([

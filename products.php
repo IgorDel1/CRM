@@ -2,12 +2,20 @@
 
 session_start();
 
-require_once 'modules/AuthCheck.php';
+if(isset($_GET['do']) && $_GET['do'] === 'logout'){
+    require_once 'api/auth/LogoutUser.php';
+    require_once 'api/DB.php';
+
+    LogoutUser('login.php', $DB, $_SESSION['token']);
+    exit;
+}
+
+require_once 'api/auth/AuthCheck.php';
 
 AuthCheck('', 'login.php');
 
-
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -24,10 +32,19 @@ AuthCheck('', 'login.php');
     <header class="header">
         <div class="container">
             <div class="header_navigation">
-                <p class="header_admin">Фамилия Имя Отчество</p>
+                <p class="header_admin">
+
+                <?php
+                    require 'api/DB.php';
+                    require_once 'api/clients/AdminName.php';
+
+                    echo AdminName($_SESSION['token'], $DB);
+                    ?>
+
+                </p>
                 <ul class="header_links">
                     <li>
-                        <a href="#">Клиенты</a>
+                        <a href="clients.php">Клиенты</a>
                         <a href="#">Товары</a>
                         <a href="#">Заказы</a>
                     </li>
@@ -41,16 +58,19 @@ AuthCheck('', 'login.php');
             <div class="container">
                 <form action="" class="form_filters">
                     <label for="search">Поиск по названию</label>
-                    <input type="text" id="search" placeholder="Ноутбук">
+                    <input type="text" id="search" name ="search" placeholder="Ноутбук">
                     <select name="sort" id="sort">
-                        <option value="0">По возрастанию</option>
-                        <option value="1">По убыванию</option>
+                        <option value="">По умолчанию</option>
+                        <option value="ASC">По возрастанию</option>
+                        <option value="DESC">По убыванию</option>
                     </select>
-                    <select name="sort" id="sort">
-                        <option value="0">Название</option>
-                        <option value="1">Цена</option>
-                        <option value="2">Количество</option>
+                    <select name="search_name" id="sort">
+                        <option value="name">Название</option>
+                        <option value="price">Цена</option>
+                        <option value="stock">Количество</option>
                     </select>
+                    <button type = "submit">Поиск</button>
+                    <a href="products.php">Сбросить</a>
                 </form>
             </div>
         </section>
@@ -73,7 +93,16 @@ AuthCheck('', 'login.php');
                     <th>Создать QR</th>
                 </thead>
                 <tbody>
-                    <tr>
+                    <?php
+                     require_once 'api/DB.php';
+                     require_once ('api/product/ProductSearch.php');
+                     require_once ('api/product/OutputProducts.php');
+
+                     $products = ProductSearch($_GET, $DB);
+
+                     OutputProducts($products);
+                    ?>
+                    <!-- <tr>
                         <td>1</td>
                         <td>Кроссовки</td>
                         <td>Кроссовки Nike</td>
@@ -83,32 +112,7 @@ AuthCheck('', 'login.php');
                         <td onclick="MicroModal.show('delete-modal')"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                         <td onclick="MicroModal.show('history-modal')"><i class="fa fa-qrcode" aria-hidden="true"></i>
                         </td>
-                    </td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>Футболка</td>
-                        <td>Футболка Lacoste</td>
-                        <td>25000</td>
-                        <td>50</td>
-                        <td onclick="MicroModal.show('edit-modal')"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                        <td onclick="MicroModal.show('delete-modal')"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
-                        <td onclick="MicroModal.show('history-modal')"><i class="fa fa-qrcode" aria-hidden="true"></i>
-                        </td>
-                    </td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>Ноутбук</td>
-                        <td>MSI Katana GF76</td>
-                        <td>75000</td>
-                        <td>10</td>
-                        <td onclick="MicroModal.show('edit-modal')"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                        <td onclick="MicroModal.show('delete-modal')"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
-                        <td onclick="MicroModal.show('history-modal')"><i class="fa fa-qrcode" aria-hidden="true"></i>
-                        </td>
-                    </td>
-                    </tr>
+                    </tr> -->
                 </tbody>
             </table>
             <button onclick="MicroModal.show('add-modal')" class="clients_add" >
@@ -209,7 +213,7 @@ AuthCheck('', 'login.php');
                         </div>
                         <div class="form-group">
                             <label for="email">Описание</label>
-                            <input type="email" id="email" name="email" required>
+                            <input type="text" id="email" name="email" required>
                         </div>
                         <div class="form-group">
                             <label for="phone">Цена</label>
@@ -224,6 +228,37 @@ AuthCheck('', 'login.php');
                             <button type="button" data-micromodal-close>Отменить</button>
                         </div>
                     </form>
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal micromodal-slide  <?php
+
+            if (isset($_SESSION['clients-errors']) &&
+            !empty($_SESSION['clients-errors'])){
+                echo 'open';
+            }
+
+        ?>"  id="error-modal" aria-hidden="true">
+    
+        <div class="modal__overlay" tabindex="-1" data-micromodal-close>
+            <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-1-title">
+                <header class="modal__header">
+                    <h2 class="modal__title" id="modal-1-title">
+                        Ошибка
+                    </h2>
+                    <button class="modal__close" aria-label="Close modal" data-micromodal-close></button>
+                </header>
+                <main class="modal__content" id="modal-1-content">
+                    <?php
+                if (isset($_SESSION['clients-errors']) && !empty($_SESSION['clients-errors'])){
+                    echo $_SESSION['clients-errors'];
+
+                    $_SESSION['clients-errors'] = '';
+                }
+                ?>
+
                 </main>
             </div>
         </div>

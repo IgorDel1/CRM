@@ -41,7 +41,7 @@ AuthCheck('', 'login.php');
                 <ul class="header_links">
                     <li>
                         <a href="#">Клиенты</a>
-                        <a href="#">Товары</a>
+                        <a href="products.php">Товары</a>
                         <a href="#">Заказы</a>
                     </li>
                 </ul>

@@ -45,11 +45,11 @@ AuthCheck('', 'login.php');
                 <ul class="header_links">
                     <li>
                         <a href="clients.php">Клиенты</a>
-                        <a href="#">Товары</a>
-                        <a href="#">Заказы</a>
+                        <a href="products.php">Товары</a>
+                        <a href="orders.php">Заказы</a>
                     </li>
                 </ul>
-                <a class="header_logout" href="#">Выйти</a>
+                <a class="header_logout" href="?do=logout" >Выйти</a>
             </div>
         </div>
     </header>
@@ -178,23 +178,6 @@ AuthCheck('', 'login.php');
         </div>
     </div>
 
-    <div class="modal micromodal-slide" id="delete-modal" aria-hidden="true">
-        <div class="modal__overlay" tabindex="-1" data-micromodal-close>
-            <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-1-title">
-                <header class="modal__header">
-                    <h2 class="modal__title" id="modal-1-title">
-                        Удалить товар?
-                    </h2>
-                    <button class="modal__close" aria-label="Close modal" data-micromodal-close></button>
-                </header>
-                <main class="modal__content" id="modal-1-content">
-
-                            <button type="submit">Удалить</button>
-                            <button type="button" data-micromodal-close>Отменить</button>
-                </main>
-            </div>
-        </div>
-    </div>
 
     <div class="modal micromodal-slide" id="add-modal" aria-hidden="true">
         <div class="modal__overlay" tabindex="-1" data-micromodal-close>
@@ -206,22 +189,22 @@ AuthCheck('', 'login.php');
                     <button class="modal__close" aria-label="Close modal" data-micromodal-close></button>
                 </header>
                 <main class="modal__content" id="modal-1-content">
-                    <form id="registration-form">
+                    <form id="registration-form" action = "api/product/AddProduct.php" method = "POST">
                         <div class="form-group">
                             <label for="full-name">Название</label>
-                            <input type="text" id="full-name" name="full-name" required>
+                            <input type="text" id="full-name" name="name">
                         </div>
                         <div class="form-group">
                             <label for="email">Описание</label>
-                            <input type="text" id="email" name="email" required>
+                            <input type="text" id="email" name="descc">
                         </div>
                         <div class="form-group">
                             <label for="phone">Цена</label>
-                            <input type="tel" id="phone" name="phone" required>
+                            <input type="tel" id="phone" name="price">
                         </div>
                         <div class="form-group">
                             <label for="birthday">Количество</label>
-                            <input type="text" id="cont" name="count" required>
+                            <input type="text" id="cont" name="stock">
                         </div>
                         <div class="form-actions">
                             <button type="submit">Добавить</button>
@@ -235,8 +218,8 @@ AuthCheck('', 'login.php');
 
     <div class="modal micromodal-slide  <?php
 
-            if (isset($_SESSION['clients-errors']) &&
-            !empty($_SESSION['clients-errors'])){
+            if (isset($_SESSION['product-errors']) &&
+            !empty($_SESSION['product-errors'])){
                 echo 'open';
             }
 
@@ -252,10 +235,10 @@ AuthCheck('', 'login.php');
                 </header>
                 <main class="modal__content" id="modal-1-content">
                     <?php
-                if (isset($_SESSION['clients-errors']) && !empty($_SESSION['clients-errors'])){
-                    echo $_SESSION['clients-errors'];
+                if (isset($_SESSION['product-errors']) && !empty($_SESSION['product-errors'])){
+                    echo $_SESSION['product-errors'];
 
-                    $_SESSION['clients-errors'] = '';
+                    $_SESSION['product-errors'] = '';
                 }
                 ?>
 

@@ -1,7 +1,7 @@
 <?php
-function OutputProducts($products){
-    if(!empty($products)){
-        foreach($products as $key => $value){
+function OutputOrders($orders){
+    if(!empty($orders)){
+        foreach($orders as $key => $value){
             $id = $value['id'];
             $name = $value['name'];
             $desc = $value['descc'];

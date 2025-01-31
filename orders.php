@@ -1,3 +1,22 @@
+<?php
+
+session_start();
+
+if(isset($_GET['do']) && $_GET['do'] === 'logout'){
+    require_once 'api/auth/LogoutUser.php';
+    require_once 'api/DB.php';
+
+    LogoutUser('login.php', $DB, $_SESSION['token']);
+    exit;
+}
+
+require_once 'api/auth/AuthCheck.php';
+
+AuthCheck('', 'login.php');
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,15 +32,24 @@
     <header class="header">
         <div class="container">
             <div class="header_navigation">
-                <p class="header_admin">Фамилия Имя Отчество</p>
+                <p class="header_admin">
+
+                <?php
+                    require 'api/DB.php';
+                    require_once 'api/clients/AdminName.php';
+
+                    echo AdminName($_SESSION['token'], $DB);
+                    ?>
+
+                </p>
                 <ul class="header_links">
                     <li>
-                        <a href="#">Клиенты</a>
-                        <a href="#">Товары</a>
+                        <a href="clients.php">Клиенты</a>
+                        <a href="products.php">Товары</a>
                         <a href="#">Заказы</a>
                     </li>
                 </ul>
-                <a class="header_logout" href="#">Выйти</a>
+                <a class="header_logout" href="?do=logout">Выйти</a>
             </div>
         </div>
     </header>
@@ -32,8 +60,9 @@
                     <label for="search">Поиск по названию</label>
                     <input type="text" id="search" placeholder="Ноутбук">
                     <select name="sort" id="sort">
-                        <option value="0">По возрастанию</option>
-                        <option value="1">По убыванию</option>
+                        <option value="">По умолчанию</option>
+                        <option value="ASC">По возрастанию</option>
+                        <option value="DESC">По убыванию</option>
                     </select>
                     <select name="sort" id="sort">
                         <option value="0">Клиент</option>
@@ -41,6 +70,8 @@
                         <option value="2">Дата</option>
                         <option value="3">Сумма</option>
                     </select>
+                    <button type = "submit">Поиск</button>
+                    <a href="orders.php">Сбросить</a>
                 </form>
             </div>
         </section>
@@ -66,7 +97,36 @@
                     <th>Подробнее</th>
                 </thead>
                 <tbody>
-                    <tr>
+                <?php
+                     require_once 'api/DB.php';
+                     
+                     $orders = $DB->query("
+                     
+                    SELECT 
+                     orders.id, 
+                     clients.name, 
+                     orders.order_date, 
+                     orders.total,
+                     GROUP_CONCAT(products.name SEPARATOR ', ') AS product_names
+                     FROM
+                        orders
+                     JOIN
+                        clients ON orders.client_id = clients.id
+                     JOIN
+                        order_items ON orders.id = order_items.order_id
+                     JOIN 
+                        products ON order_items.product_id = products.id
+                     GROUP BY
+                        orders.id, clients.name, orders.order_date, orders.total;  
+                     
+                     ")->fetchAll();
+
+                     echo json_encode($orders);
+                    ?>
+
+
+
+                    <!-- <tr>
                         <td>1</td>
                         <td>Иванов Иван Иванович</td>
                         <td>24.01.2025</td>
@@ -81,7 +141,7 @@
                         </i>
                         </td>
                     </td>
-                    </tr>
+                    </tr> -->
                 </tbody>
             </table>
             <button onclick="MicroModal.show('add-modal')" class="clients_add" >

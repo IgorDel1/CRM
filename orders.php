@@ -99,29 +99,32 @@ AuthCheck('', 'login.php');
                 <tbody>
                 <?php
                      require_once 'api/DB.php';
+                     require_once 'api/orders/OutputOrders.php';
                      
                      $orders = $DB->query("
                      
                     SELECT 
-                     orders.id, 
-                     clients.name, 
-                     orders.order_date, 
-                     orders.total,
-                     GROUP_CONCAT(products.name SEPARATOR ', ') AS product_names
-                     FROM
+                        orders.id, 
+                        clients.name, 
+                        orders.order_date, 
+                        orders.total,
+                        GROUP_CONCAT(CONCAT(products.name, ' ($', products.price, ')') SEPARATOR ', ') AS product_details
+                    FROM
                         orders
-                     JOIN
+                    JOIN
                         clients ON orders.client_id = clients.id
-                     JOIN
+                    JOIN
                         order_items ON orders.id = order_items.order_id
-                     JOIN 
+                    JOIN 
                         products ON order_items.product_id = products.id
-                     GROUP BY
-                        orders.id, clients.name, orders.order_date, orders.total;  
+                    GROUP BY
+                        orders.id, clients.name, orders.order_date, orders.total; 
                      
                      ")->fetchAll();
 
-                     echo json_encode($orders);
+                    //  $orders = OrdersSearch($_GET, $DB);
+
+                     OutputOrders($orders);
                     ?>
 
 

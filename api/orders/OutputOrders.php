@@ -14,9 +14,10 @@ function OutputOrders($orders){
                         <td>$order_date</td>
                         <td>$total</td>
                         <td>$product_details</td>
-                        <td><i class='fa fa-history' aria-hidden='true'></i></td>
-                        <td><i class='fa fa-pencil-square-o' aria-hidden='true'></i></td>
-                        <td><a href = 'api/product/DeleteProduct.php?id=$id'><i class='fa fa-trash' aria-hidden='true'></a></i></td>  
+                        <td><i class='fa fa-pencil-square-o' aria-hidden='true'></i>
+                        <td><a href = 'api/product/DeleteProduct.php?id=$id'><i class='fa fa-trash-o' aria-hidden='true'></a></i></td> 
+                        <td><i class='fa fa-qrcode' aria-hidden='true'></i> 
+                        <td><i class='fa fa-ellipsis-h' aria-hidden='true'></i> 
                         </tr>
         ";
         }

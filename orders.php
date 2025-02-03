@@ -57,18 +57,18 @@ AuthCheck('', 'login.php');
         <section class="filters">
             <div class="container">
                 <form action="" class="form_filters">
-                    <label for="search">Поиск по названию</label>
-                    <input type="text" id="search" placeholder="Ноутбук">
+                <label for="search">Поиск по названию</label>
+                    <input type="text" id="search" name="search" placeholder="Ноутбук">
                     <select name="sort" id="sort">
                         <option value="">По умолчанию</option>
                         <option value="ASC">По возрастанию</option>
                         <option value="DESC">По убыванию</option>
                     </select>
-                    <select name="sort" id="sort">
-                        <option value="0">Клиент</option>
-                        <option value="1">ID</option>
-                        <option value="2">Дата</option>
-                        <option value="3">Сумма</option>
+                    <select name="search_name" id="search_name">
+                        <option value="clients.name">По клинету</option>
+                        <option value="orders.id">По ID</option>
+                        <option value="orders.total">По цене</option>
+                        <option value="orders.order_date">По дате</option>
                     </select>
                     <button type = "submit">Поиск</button>
                     <a href="orders.php">Сбросить</a>
@@ -89,8 +89,8 @@ AuthCheck('', 'login.php');
                     <th>Дата заказа</th>
                     <th>Цена</th>
                     <th>Название</th>
-                    <th>Количество</th>
-                    <th>Общая цена</th>
+                    <!-- <th>Количество</th>
+                    <th>Общая цена</th> -->
                     <th>Редактировать</th>
                     <th>Удалить</th>
                     <th>Создать QR</th>
@@ -100,29 +100,30 @@ AuthCheck('', 'login.php');
                 <?php
                      require_once 'api/DB.php';
                      require_once 'api/orders/OutputOrders.php';
-                     
-                     $orders = $DB->query("
-                     
-                    SELECT 
-                        orders.id, 
-                        clients.name, 
-                        orders.order_date, 
-                        orders.total,
-                        GROUP_CONCAT(CONCAT(products.name, ' ($', products.price, ')') SEPARATOR ', ') AS product_details
-                    FROM
-                        orders
-                    JOIN
-                        clients ON orders.client_id = clients.id
-                    JOIN
-                        order_items ON orders.id = order_items.order_id
-                    JOIN 
-                        products ON order_items.product_id = products.id
-                    GROUP BY
-                        orders.id, clients.name, orders.order_date, orders.total; 
-                     
-                     ")->fetchAll();
+                     require_once 'api/orders/OrdersSearch.php';
 
-                    //  $orders = OrdersSearch($_GET, $DB);
+                     $orders = OrdersSearch($_GET, $DB);
+                     
+                    //  $orders = $DB->query("
+                     
+                    //     SELECT 
+                    //         orders.id, 
+                    //         clients.name, 
+                    //         orders.order_date, 
+                    //         orders.total,
+                    //         GROUP_CONCAT(CONCAT(products.name, ' (',order_items.quantity, 'шт. : ', products.price, ')') SEPARATOR ', ') AS product_details
+                    //     FROM
+                    //         orders
+                    //     JOIN
+                    //         clients ON orders.client_id = clients.id
+                    //     JOIN
+                    //         order_items ON orders.id = order_items.order_id
+                    //     JOIN 
+                    //         products ON order_items.product_id = products.id
+                    //     GROUP BY
+                    //         orders.id, clients.name, orders.order_date, orders.total; 
+                     
+                    //  ")->fetchAll();
 
                      OutputOrders($orders);
                     ?>
@@ -144,7 +145,7 @@ AuthCheck('', 'login.php');
                         </i>
                         </td>
                     </td>
-                    </tr> -->
+                    </tr>  -->
                 </tbody>
             </table>
             <button onclick="MicroModal.show('add-modal')" class="clients_add" >
@@ -242,30 +243,36 @@ AuthCheck('', 'login.php');
                     <button class="modal__close" aria-label="Close modal" data-micromodal-close></button>
                 </header>
                 <main class="modal__content" id="modal-1-content">
-                    <form id="registration-form">
+                    <form id="registration-form" metohd = "POST" action = "api/orders/AddOrders.php">
                         <div class="form-group">
-                            <label for="full-name">ФИО</label>
-                            <input type="text" id="full-name" name="full-name" required>
+                            <label for="client">Клиент</label>
+                            <select name="client" id="client" class = "main_select">
+                            <?php
+                            $users = $DB->query("SELECT id, name FROM clients")->fetchAll();
+                            foreach($users as $key => $user){
+                                $id = $user['id'];
+                                $name = $user['name'];
+                                echo "<option value='$id'>$name</option>";
+                            }
+                            ?>
+
+                            </select>
+                            
                         </div>
                         <div class="form-group">
-                            <label for="email">Дата заказа</label>
-                            <input type="email" id="email" name="email" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="phone">Цена</label>
-                            <input type="tel" id="phone" name="phone" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="birthday">Название</label>
-                            <input type="text" id="cont" name="count" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="birthday">Количество</label>
-                            <input type="text" id="cont" name="count" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="birthday">Общая цена</label>
-                            <input type="text" id="cont" name="count" required>
+                        <label for="products">Товары</label>
+                        <select name="products" id="products" class = "main_select" multiple>
+                        <?php
+                            $users = $DB->query("SELECT id, name, price, stock FROM products WHERE stock > 0")->fetchAll();
+                            foreach($users as $key => $product){
+                                $id = $product['id'];
+                                $name = $product['name'];
+                                $price = $product['price'];
+                                $stock = $product['stock'];
+                                echo "<option value='$id'>$name : $price\$ : $stock шт.</option>";
+                            }
+                            ?>
+                        </select>
                         </div>
                         <div class="form-actions">
                             <button type="submit">Добавить</button>
@@ -310,6 +317,38 @@ AuthCheck('', 'login.php');
                         </table>
                     </div>
                 </main>
+
+                
+                <div class="modal micromodal-slide  <?php
+
+            if (isset($_SESSION['orders-errors']) &&
+            !empty($_SESSION['orders-errors'])){
+                echo 'open';
+            }
+
+        ?>"  id="error-modal" aria-hidden="true">
+    
+        <div class="modal__overlay" tabindex="-1" data-micromodal-close>
+            <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-1-title">
+                <header class="modal__header">
+                    <h2 class="modal__title" id="modal-1-title">
+                        Ошибка
+                    </h2>
+                    <button class="modal__close" aria-label="Close modal" data-micromodal-close></button>
+                </header>
+                <main class="modal__content" id="modal-1-content">
+                    <?php
+                if (isset($_SESSION['orders-errors']) && !empty($_SESSION['orders-errors'])){
+                    echo $_SESSION['orders-errors'];
+
+                    $_SESSION['orders-errors'] = '';
+                }
+                ?>
+
+                </main>
+            </div>
+        </div>
+    </div>
             </div>
         </div>
     </div>

@@ -93,7 +93,7 @@ AuthCheck('', 'login.php');
                     <th>Общая цена</th> -->
                     <th>Редактировать</th>
                     <th>Удалить</th>
-                    <th>Создать QR</th>
+                    <th>Создать чек</th>
                     <th>Подробнее</th>
                 </thead>
                 <tbody>
@@ -243,7 +243,7 @@ AuthCheck('', 'login.php');
                     <button class="modal__close" aria-label="Close modal" data-micromodal-close></button>
                 </header>
                 <main class="modal__content" id="modal-1-content">
-                    <form id="registration-form" metohd = "POST" action = "api/orders/AddOrders.php">
+                    <form id="registration-form" method="POST" action="api/orders/AddOrders.php">
                         <div class="form-group">
                             <label for="client">Клиент</label>
                             <select name="client" id="client" class = "main_select">
@@ -261,7 +261,7 @@ AuthCheck('', 'login.php');
                         </div>
                         <div class="form-group">
                         <label for="products">Товары</label>
-                        <select name="products" id="products" class = "main_select" multiple>
+                        <select name="products[]" id="products" class = "main_select" multiple>
                         <?php
                             $users = $DB->query("SELECT id, name, price, stock FROM products WHERE stock > 0")->fetchAll();
                             foreach($users as $key => $product){
@@ -319,41 +319,41 @@ AuthCheck('', 'login.php');
                 </main>
 
                 
-                <div class="modal micromodal-slide  <?php
 
-            if (isset($_SESSION['orders-errors']) &&
-            !empty($_SESSION['orders-errors'])){
-                echo 'open';
-            }
-
-        ?>"  id="error-modal" aria-hidden="true">
-    
-        <div class="modal__overlay" tabindex="-1" data-micromodal-close>
-            <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-1-title">
-                <header class="modal__header">
-                    <h2 class="modal__title" id="modal-1-title">
-                        Ошибка
-                    </h2>
-                    <button class="modal__close" aria-label="Close modal" data-micromodal-close></button>
-                </header>
-                <main class="modal__content" id="modal-1-content">
-                    <?php
-                if (isset($_SESSION['orders-errors']) && !empty($_SESSION['orders-errors'])){
-                    echo $_SESSION['orders-errors'];
-
-                    $_SESSION['orders-errors'] = '';
-                }
-                ?>
-
-                </main>
-            </div>
-        </div>
-    </div>
             </div>
         </div>
     </div>
     
-    
+    <div class="modal micromodal-slide  <?php
+
+if (isset($_SESSION['orders-errors']) &&
+!empty($_SESSION['orders-errors'])){
+    echo 'open';
+}
+
+?>"  id="error-modal" aria-hidden="true">
+
+<div class="modal__overlay" tabindex="-1" data-micromodal-close>
+<div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-1-title">
+    <header class="modal__header">
+        <h2 class="modal__title" id="modal-1-title">
+            Ошибка
+        </h2>
+        <button class="modal__close" aria-label="Close modal" data-micromodal-close></button>
+    </header>
+    <main class="modal__content" id="modal-1-content">
+        <?php
+    if (isset($_SESSION['orders-errors']) && !empty($_SESSION['orders-errors'])){
+        echo $_SESSION['orders-errors'];
+
+        $_SESSION['orders-errors'] = '';
+    }
+    ?>
+
+    </main>
+</div>
+</div>
+</div>
     
           
 

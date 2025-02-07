@@ -247,6 +247,7 @@ AuthCheck('', 'login.php');
                         <div class="form-group">
                             <label for="client">Клиент</label>
                             <select name="client" id="client" class = "main_select">
+                            <option value = "new">Новый пользователь</option>
                             <?php
                             $users = $DB->query("SELECT id, name FROM clients")->fetchAll();
                             foreach($users as $key => $user){
@@ -258,6 +259,10 @@ AuthCheck('', 'login.php');
 
                             </select>
                             
+                        </div>
+                        <div id = "email-field" class ="modal_form-group">
+                            <label for="email">Почта</label>
+                            <input type="email" id="email" name = "email">
                         </div>
                         <div class="form-group">
                         <label for="products">Товары</label>
@@ -360,6 +365,8 @@ if (isset($_SESSION['orders-errors']) &&
     <script  defer src ="https://unpkg.com/micromodal/dist/micromodal.min.js"></script>
 
     <script defer src="scripts/initClientsModal.js"></script>
+
+    <script defer src="scripts/orders.js"></script>
 
 </body>
 </html>

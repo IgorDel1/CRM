@@ -7,6 +7,10 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $fields = ['client', 'products'];
     $errors = [];
 
+    if($formData['client'] === 'new'){
+        $fields[] = 'email';
+    }
+
     $_SESSION['orders-errors'] = '';
 
     foreach($fields as $key => $field){
@@ -37,9 +41,26 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         }
     }
 
+    $clientID = $formData['client'] === 'new' ?
+        time() :
+        $formData['client'];
+
+    if($formData['client'] === 'new'){
+    $stmt = $DB->prepare("
+        insert into clients(id, name, email, phone) values(?,?,?,?)"
+    );
+    $stmt->execute([
+        $clientID,
+        'USER#' . $clientID,
+        $formData['email'],
+        '0 (000)000 00 00',
+    ]);
+
+    }    
+
     $orders = [
         'id' => time(),
-        'client_id' => $formData['client'],
+        'client_id' => $clientID,
         'total' => $total,
     ];
 

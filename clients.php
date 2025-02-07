@@ -53,8 +53,11 @@ AuthCheck('', 'login.php');
         <section class="filters">
             <div class="container">
                 <form action = "" method = "GET" class="form_filters">
-                    <label for="search">Поиск по имени</label>
-                    <input type="text" id="search" placeholder="Александр" name = "search">
+                <select name="search_name" id="search_name">
+                        <option value="name">По имени</option>
+                        <option value="email">По почте</option>
+                    </select>
+                    <input class = "main_input" type="text" id = "search" name = "search">
                     <select name="sort" id="sort">
                         <option value="">По умолчанию</option>
                         <option value="ASC">По возрастанию</option>
